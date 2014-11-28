@@ -6,7 +6,29 @@ kiban2pgsql
 
 必要な項目から徐々に実装していくつもり。
 
-- 
+# 仕様
+
+テーブル
+
+| 名前   | データ型                 | NULL ?   | default  | 説明            |
+|:------|:-----------------------:|:--------:|:--------:|:--------------:|
+| gid   | bigserial               | NOT NULL | シーケンス |                |
+| type  | text                    | NOT NULL |          | 地物の種類       |
+| geom  | Geometry(GEOMETRY,4612) | NOT NULL |          | 図形            |
+| attrs | text[]                  | NULL     |          | 属性(配列)       |
+| date  | date                    | NOT NULL |          | データ整備の年月日 |
+| mesh  | text                    | NOT NULL |          | 2次メッシュコード |
+
+
+# 地物の種類
+* 済
+ - 
+* 未
+ - AdminArea
+ - AdminPt
+ - AdminBdry
+
+
 # Usage
     php kiban2pgsql.php [<options>] <xmlfile> [<schema>.]<table>
 
@@ -21,8 +43,7 @@ kiban2pgsql
          default if you do not specify any options.
      -p  Prepare mode, only creates the table.
     
-    -g <geocolumn> Specify the name of the geometry/geography column
-      (mostly useful in append mode).
+
 
 
 # 基盤地図情報
