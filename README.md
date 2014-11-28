@@ -1,10 +1,15 @@
 kiban2pgsql
+- - -
 ================
 基盤地図情報(GML)をPostGIS用のロード文に変換するもの。
 
 一つのxmlファイルを読み込み、標準出力する。
 
 必要な項目から徐々に実装していくつもり。
+
+# ソース
+
+https://github.com/shigekun/kiban2pgsql
 
 # 仕様
 
@@ -24,9 +29,9 @@ kiban2pgsql
 # 地物の種類
 * 済
  - AdminArea
+ - AdminBdry
 * 未
  - AdminPt
- - AdminBdry
 
 
 # Usage
@@ -70,7 +75,7 @@ psql -p 5433 -d kibanmapdb -c "update spatial_ref_sys set srtext=replace(srtext,
 
 psql -h spatialsv02 -p 5433 -d kibanmapdb -f sql/createtable.sql
 
-php kiban2pgsql.php sample/FG-GML-362442-AdmArea-20141001-0001.xml -a > test.log
+php php/kiban2pgsql.php sample/FG-GML-362442-AdmArea-20141001-0001.xml -a > test.log
 psql -h spatialsv02 -p 5433 -d kibanmapdb -f test.log
 psql -h spatialsv02 -p 5433 -d kibanmapdb -c "select * from kiban_data order by gid desc limit 1"
 
@@ -81,6 +86,7 @@ psql -h spatialsv02 -p 5433 -d kibanmapdb -c "vacuum full analyze;"
 
 
 # 履歴
+2014-11-28 AdmBdry
 2014-11-28 AdmArea
 
 2014-11-27 開始
