@@ -60,12 +60,19 @@ psql -d kibanmapdb -c "update spatial_ref_sys set proj4text=replace(proj4text,'-
 psql -d kibanmapdb -c "update spatial_ref_sys set srtext=replace(srtext,'-148,507,685,0,0,0,0','-146.414,507.337,680.507,0,0,0,0') where srtext like '%-148,507%';"
 
 psql -h spatialsv02 -p 5432 -d kibanmapdb -f sql/createtable.sql
+
+php kiban2pgsql.php sample/FG-GML-362442-AdmArea-20141001-0001.xml -a > test.log
 psql -h spatialsv02 -p 5432 -d kibanmapdb -f test.log
 psql -h spatialsv02 -p 5432 -d kibanmapdb -c "select * from kiban_data order by gid desc limit 1"
+
+for i in xml/*AdmArea*.xml ;do php kiban2pgsql.php $i -a > test.log; done
+for i in `find -L . -name "*AdmArea*"` ; do php kiban2pgsql.php $i -a >> test.log ; done
+psql -h spatialsv02 -p 5432 -d kibanmapdb -f test.log
 
 
 # 履歴
 2014-11-28 AdmArea
+
 2014-11-27 開始
 　[基盤地図対応GDAL/OGR](http://www.osgeo.jp/foss4g-mext/)がGMLに対応していないので作り始めた
 
