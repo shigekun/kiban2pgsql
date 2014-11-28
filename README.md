@@ -1,17 +1,16 @@
 kiban2pgsql
 ================
 基盤地図情報(GML)をPostGIS用のロード文に変換するもの。
+
 一つのxmlファイルを読み込み、標準出力する。
 
 必要な項目から徐々に実装していくつもり。
 
+- 
 # Usage
     php kiban2pgsql.php [<options>] <xmlfile> [<schema>.]<table>
 
 # Options
-
-    -s [<from>:]<srid> Set the SRID field. Defaults to 0.
-      Optionally reprojects from given SRID (cannot be used with -D).
 
     (-d|a|c|p) These are mutually exclusive options:
      -d  Drops the table, then recreates it and populates
