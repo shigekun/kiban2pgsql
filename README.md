@@ -51,23 +51,23 @@ http://www.gsi.go.jp/kiban/
 # その他
 
 MEMO
-createdb -O postgres -T template0 -E UTF8 kibanmapdb
-psql -d kibanmapdb -c "create extension postgis"
-psql -d kibanmapdb -c "create extension postgis_topology"
-psql -d kibanmapdb -f /usr/local/pgsql-9.1.3/share/contrib/postgis-2.0/legacy.sql
-psql -f /usr/local/src/postgresql-9.1.3/contrib/postgis-2.0.0/doc/postgis_comments.sql kibanmapdb
-psql -d kibanmapdb -c "update spatial_ref_sys set proj4text=replace(proj4text,'-148,507,685,0,0,0,0','-146.414,507.337,680.507,0,0,0,0') where srtext like '%-148,507%';"
-psql -d kibanmapdb -c "update spatial_ref_sys set srtext=replace(srtext,'-148,507,685,0,0,0,0','-146.414,507.337,680.507,0,0,0,0') where srtext like '%-148,507%';"
+createdb -p 5433 -O postgres -T template0 -E UTF8 kibanmapdb
+psql -p 5433 -d kibanmapdb -c "create extension postgis"
+psql -p 5433 -d kibanmapdb -c "create extension postgis_topology"
+psql -p 5433 -d kibanmapdb -f /usr/local/pgsql-9.2.2/share/contrib/postgis-2.0/legacy.sql
+psql -p 5433 -f /usr/local/src/postgresql-9.2.2/contrib/postgis-2.0.2/doc/postgis_comments.sql kibanmapdb
+psql -p 5433 -d kibanmapdb -c "update spatial_ref_sys set proj4text=replace(proj4text,'-148,507,685,0,0,0,0','-146.414,507.337,680.507,0,0,0,0') where srtext like '%-148,507%';"
+psql -p 5433 -d kibanmapdb -c "update spatial_ref_sys set srtext=replace(srtext,'-148,507,685,0,0,0,0','-146.414,507.337,680.507,0,0,0,0') where srtext like '%-148,507%';"
 
-psql -h spatialsv02 -p 5432 -d kibanmapdb -f sql/createtable.sql
+psql -h spatialsv02 -p 5433 -d kibanmapdb -f sql/createtable.sql
 
 php kiban2pgsql.php sample/FG-GML-362442-AdmArea-20141001-0001.xml -a > test.log
-psql -h spatialsv02 -p 5432 -d kibanmapdb -f test.log
-psql -h spatialsv02 -p 5432 -d kibanmapdb -c "select * from kiban_data order by gid desc limit 1"
+psql -h spatialsv02 -p 5433 -d kibanmapdb -f test.log
+psql -h spatialsv02 -p 5433 -d kibanmapdb -c "select * from kiban_data order by gid desc limit 1"
 
 for i in xml/*AdmArea*.xml ;do php kiban2pgsql.php $i -a > test.log; done
 for i in `find -L . -name "*AdmArea*"` ; do php kiban2pgsql.php $i -a >> test.log ; done
-psql -h spatialsv02 -p 5432 -d kibanmapdb -f test.log
+psql -h spatialsv02 -p 5433 -d kibanmapdb -f test.log
 
 
 # 履歴

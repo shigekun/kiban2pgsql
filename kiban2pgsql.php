@@ -280,12 +280,16 @@ function xml2pgsql($from_xml,$to_file,$tablename) {
 					//errorout( "   Adm posList " . $tmp_posList, INFO );
 					$tmp_posList = trim($tmp_posList);
 					$ar_coordinates = explode("\n",$tmp_posList);
-					$ar_coordinates = array_map(function($v){ $v2 = explode(" ",$v); return ($v2[1]." ".$v2[0]); },$ar_coordinates);
+					$ar_coordinates = array_map(function($v){ $v2 = explode(" ",trim($v)); return ($v2[1]." ".$v2[0]); },$ar_coordinates);
 					//errorout( "   Adm posList " . var_export($ar_coordinates,true), ERROR );
 					if ( $is_in_exterior ) {
 						$exterior = "(" . implode(",",$ar_coordinates) . ")";
 					} else if ( $is_in_interior ) {
-						$interior = "(" . implode(",",$ar_coordinates) . ")";
+						if ( empty($interior) ) {
+							$interior = "(" . implode(",",$ar_coordinates) . ")";
+						} else {
+							$interior .= ",(" . implode(",",$ar_coordinates) . ")";
+						}
 					}
 					break;
 
