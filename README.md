@@ -18,7 +18,7 @@ kiban2pgsql
 | geom          | Geometry(GEOMETRY,4612) | NOT NULL |          | 図形            |
 | attributes    | text                    | NULL     | <attributes></attributes> | 属性(XML文字列)  <attributes>...</attributes> |
 | data_date     | date                    | NOT NULL |          | データ整備の年月日 |
-| mesh          | text                    | NOT NULL |          | 2次メッシュコード |
+| meshcode      | text                    | NOT NULL |          | 2次メッシュコード |
 
 
 # 地物の種類
@@ -34,7 +34,7 @@ kiban2pgsql
     php kiban2pgsql.php [<options>] <xmlfile> [<schema>.]<table>
 
 # Options
-
+未対応
     (-d|a|c|p) These are mutually exclusive options:
      -d  Drops the table, then recreates it and populates it with current shape file data.
      -a  Appends shape file into current table, must be exactly the same table schema.
@@ -50,7 +50,22 @@ http://www.gsi.go.jp/kiban/
 
 # その他
 
+MEMO
+createdb -O postgres -T template0 -E UTF8 kibanmapdb
+psql -d kibanmapdb -c "create extension postgis"
+psql -d kibanmapdb -c "create extension postgis_topology"
+psql -d kibanmapdb -f /usr/local/pgsql-9.1.3/share/contrib/postgis-2.0/legacy.sql
+psql -f /usr/local/src/postgresql-9.1.3/contrib/postgis-2.0.0/doc/postgis_comments.sql kibanmapdb
+psql -d kibanmapdb -c "update spatial_ref_sys set proj4text=replace(proj4text,'-148,507,685,0,0,0,0','-146.414,507.337,680.507,0,0,0,0') where srtext like '%-148,507%';"
+psql -d kibanmapdb -c "update spatial_ref_sys set srtext=replace(srtext,'-148,507,685,0,0,0,0','-146.414,507.337,680.507,0,0,0,0') where srtext like '%-148,507%';"
+
+psql -h spatialsv02 -p 5432 -d kibanmapdb -f sql/createtable.sql
+psql -h spatialsv02 -p 5432 -d kibanmapdb -f test.log
+psql -h spatialsv02 -p 5432 -d kibanmapdb -c "select * from kiban_data order by gid desc limit 1"
+
+
 # 履歴
+2014-11-28 AdmArea
 2014-11-27 開始
 　[基盤地図対応GDAL/OGR](http://www.osgeo.jp/foss4g-mext/)がGMLに対応していないので作り始めた
 
