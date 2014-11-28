@@ -1,5 +1,6 @@
 kiban2pgsql
-- - -
+
+# kiban2pgsql
 ================
 基盤地図情報(GML)をPostGIS用のロード文に変換するもの。
 
