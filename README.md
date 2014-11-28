@@ -34,13 +34,14 @@ kiban2pgsql
     php kiban2pgsql.php [<options>] <xmlfile> [<schema>.]<table>
 
 # Options
-未対応
+
     (-d|a|c|p) These are mutually exclusive options:
-     -d  Drops the table, then recreates it and populates it with current shape file data.
-     -a  Appends shape file into current table, must be exactly the same table schema.
+     -d  Drops the table, then recreates it.
+     -a  Appends into current table, must be exactly the same table schema.
      -c  Creates a new table and populates it, this is the default if you do not specify any options.
      -p  Prepare mode, only creates the table.
     
+     -f  Force Drop the table.
 
 
 
@@ -68,6 +69,7 @@ psql -h spatialsv02 -p 5433 -d kibanmapdb -c "select * from kiban_data order by 
 for i in xml/*AdmArea*.xml ;do php kiban2pgsql.php $i -a > test.log; done
 for i in `find -L . -name "*AdmArea*"` ; do php kiban2pgsql.php $i -a >> test.log ; done
 psql -h spatialsv02 -p 5433 -d kibanmapdb -f test.log
+psql -h spatialsv02 -p 5433 -d kibanmapdb -c "vacuum full analyze;"
 
 
 # 履歴
