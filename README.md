@@ -23,9 +23,8 @@ kiban2pgsql
 
 # 地物の種類
 * 済
- - 
-* 未
  - AdminArea
+* 未
  - AdminPt
  - AdminBdry
 
@@ -48,6 +47,15 @@ kiban2pgsql
 # 基盤地図情報
 ## ダウンロードサイト
 http://www.gsi.go.jp/kiban/
+
+## 問題点
+### AdmArea(市町村)ポリゴンがない
+654240
+### AdmAreaポリゴンが交差
+492937
+523241
+553812
+604172
 
 # その他
 
