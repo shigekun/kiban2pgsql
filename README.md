@@ -10,14 +10,15 @@ kiban2pgsql
 
 テーブル
 
-| 名前   | データ型                 | NULL ?   | default  | 説明            |
-|:------|:-----------------------:|:--------:|:--------:|:--------------:|
-| gid   | bigserial               | NOT NULL | シーケンス |                |
-| type  | text                    | NOT NULL |          | 地物の種類       |
-| geom  | Geometry(GEOMETRY,4612) | NOT NULL |          | 図形            |
-| attrs | text[]                  | NULL     |          | 属性(配列)       |
-| date  | date                    | NOT NULL |          | データ整備の年月日 |
-| mesh  | text                    | NOT NULL |          | 2次メッシュコード |
+| 名前           | データ型                 | NULL ?   | default  | 説明            |
+|:--------------|:-----------------------:|:--------:|:--------:|:--------------:|
+| gid           | bigserial               | NOT NULL | シーケンス |                |
+| fid           | text                    | NOT NULL |          | fid            |
+| feature_type  | text                    | NOT NULL |          | 地物の種類       |
+| geom          | Geometry(GEOMETRY,4612) | NOT NULL |          | 図形            |
+| attributes    | text                    | NULL     | <attributes></attributes> | 属性(XML文字列)  <attributes>...</attributes> |
+| data_date     | date                    | NOT NULL |          | データ整備の年月日 |
+| mesh          | text                    | NOT NULL |          | 2次メッシュコード |
 
 
 # 地物の種類
@@ -35,12 +36,9 @@ kiban2pgsql
 # Options
 
     (-d|a|c|p) These are mutually exclusive options:
-     -d  Drops the table, then recreates it and populates
-         it with current shape file data.
-     -a  Appends shape file into current table, must be
-         exactly the same table schema.
-     -c  Creates a new table and populates it, this is the
-         default if you do not specify any options.
+     -d  Drops the table, then recreates it and populates it with current shape file data.
+     -a  Appends shape file into current table, must be exactly the same table schema.
+     -c  Creates a new table and populates it, this is the default if you do not specify any options.
      -p  Prepare mode, only creates the table.
     
 
