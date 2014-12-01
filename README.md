@@ -1,12 +1,10 @@
 kiban2pgsql
 
 # kiban2pgsql
-================
-基盤地図情報(GML)をPostGIS用のロード文に変換するもの。
-
-一つのxmlファイルを読み込み、標準出力する。
-
-必要な項目から徐々に実装していくつもり。
+================  
+基盤地図情報(GML)をPostGIS用のロード文に変換するもの。  
+一つのxmlファイルを読み込み、標準出力する。  
+必要な項目から徐々に実装していくつもり。  
 
 # ソース
 
@@ -58,38 +56,42 @@ http://www.gsi.go.jp/kiban/
 ### AdmArea(市町村)ポリゴンがない
 654240
 ### AdmAreaポリゴンが交差
-492937
-523241
-553812
-604172
+492937  
+523241  
+553812  
+604172  
 
 # その他
-
-MEMO
-createdb -p 5433 -O postgres -T template0 -E UTF8 kibanmapdb
-psql -p 5433 -d kibanmapdb -c "create extension postgis"
-psql -p 5433 -d kibanmapdb -c "create extension postgis_topology"
-psql -p 5433 -d kibanmapdb -f /usr/local/pgsql-9.2.2/share/contrib/postgis-2.0/legacy.sql
-psql -p 5433 -f /usr/local/src/postgresql-9.2.2/contrib/postgis-2.0.2/doc/postgis_comments.sql kibanmapdb
-psql -p 5433 -d kibanmapdb -c "update spatial_ref_sys set proj4text=replace(proj4text,'-148,507,685,0,0,0,0','-146.414,507.337,680.507,0,0,0,0') where srtext like '%-148,507%';"
-psql -p 5433 -d kibanmapdb -c "update spatial_ref_sys set srtext=replace(srtext,'-148,507,685,0,0,0,0','-146.414,507.337,680.507,0,0,0,0') where srtext like '%-148,507%';"
-
-psql -h spatialsv02 -p 5433 -d kibanmapdb -f sql/createtable.sql
-
-php php/kiban2pgsql.php sample/FG-GML-362442-AdmArea-20141001-0001.xml -a > test.log
-psql -h spatialsv02 -p 5433 -d kibanmapdb -f test.log
-psql -h spatialsv02 -p 5433 -d kibanmapdb -c "select * from kiban_data order by gid desc limit 1"
-
-for i in xml/*AdmArea*.xml ;do php kiban2pgsql.php $i -a > test.log; done
-for i in `find -L . -name "*AdmArea*"` ; do php kiban2pgsql.php $i -a >> test.log ; done
-psql -h spatialsv02 -p 5433 -d kibanmapdb -f test.log
-psql -h spatialsv02 -p 5433 -d kibanmapdb -c "vacuum full analyze;"
+## MEMO  
+### DB準備
+createdb -p 5433 -O postgres -T template0 -E UTF8 kibanmapdb  
+psql -p 5433 -d kibanmapdb -c "create extension postgis"  
+psql -p 5433 -d kibanmapdb -c "create extension postgis_topology"  
+psql -p 5433 -d kibanmapdb -f /usr/local/pgsql-9.2.2/share/contrib/postgis-2.0/legacy.sql  
+psql -p 5433 -f /usr/local/src/postgresql-9.2.2/contrib/postgis-2.0.2/doc/postgis_comments.sql kibanmapdb  
+psql -p 5433 -d kibanmapdb -c "update spatial_ref_sys set proj4text=replace(proj4text,'-148,507,685,0,0,0,0','-146.414,507.337,680.507,0,0,0,0') where srtext like '%-148,507%';"  
+psql -p 5433 -d kibanmapdb -c "update spatial_ref_sys set srtext=replace(srtext,'-148,507,685,0,0,0,0','-146.414,507.337,680.507,0,0,0,0') where srtext like '%-148,507%';"  
+  
+psql -h spatialsv02 -p 5433 -d kibanmapdb -f sql/createtable.sql  
+  
+### テーブル作成のみ
+php php/kiban2pgsql.php sample/FG-GML-362442-AdmArea-20141001-0001.xml -p -d > test.log  
+### 追記
+php php/kiban2pgsql.php sample/FG-GML-362442-AdmArea-20141001-0001.xml -a >> test.log  
+### 実行
+psql -h spatialsv02 -p 5433 -d kibanmapdb -f test.log  
+psql -h spatialsv02 -p 5433 -d kibanmapdb -c "select * from kiban_data order by gid desc limit 1"  
+  
+### まとめて処理
+for i in \`find -L . -name "\*AdmArea\*"\` ; do php kiban2pgsql.php $i -a >> test.log ; done  
+  
+psql -h spatialsv02 -p 5433 -d kibanmapdb -f test.log  
+psql -h spatialsv02 -p 5433 -d kibanmapdb -c "vacuum full analyze;"  
 
 
 # 履歴
-2014-11-28 AdmBdry
-2014-11-28 AdmArea
-
-2014-11-27 開始
-　[基盤地図対応GDAL/OGR](http://www.osgeo.jp/foss4g-mext/)がGMLに対応していないので作り始めた
+2014-11-28 AdmBdry  
+2014-11-28 AdmArea  
+2014-11-27 開始  
+　[基盤地図対応GDAL/OGR](http://www.osgeo.jp/foss4g-mext/)がGMLに対応していないので作り始めた  
 
